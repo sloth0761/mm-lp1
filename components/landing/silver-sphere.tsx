@@ -8,15 +8,11 @@ interface Props {
   delay?: number;
 }
 
-export function SilverSphere({
-  className,
-  size = 480,
-  delay = 0,
-}: Props) {
+export function SilverSphere({ className, size = 480, delay = 0 }: Props) {
   return (
     <motion.div
       aria-hidden
-      className={`silver-sphere absolute rounded-full ${className ?? ""}`}
+      className={`silver-sphere pointer-events-none absolute rounded-full ${className ?? ""}`}
       style={{ width: size, height: size }}
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{

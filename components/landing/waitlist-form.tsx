@@ -9,9 +9,7 @@ export function WaitlistForm() {
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
 
-  async function handleSubmit(
-    e: React.FormEvent<HTMLFormElement>
-  ) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
     if (!email.trim()) return;
@@ -22,36 +20,29 @@ export function WaitlistForm() {
     try {
       const response = await fetch("/api/waitlist", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email,
-        }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
       });
 
       const data = await response.json();
 
+      // Email already on waitlist — treat as success
+      if (response.status === 409) {
+        setSuccess(true);
+        setEmail("");
+        return;
+      }
+
       if (!response.ok) {
-        throw new Error(
-          data.error || "Failed to join waitlist"
-        );
+        throw new Error(data.error || "Failed to join waitlist");
       }
 
       setSuccess(true);
       setEmail("");
-
-      posthog.identify(email, {
-        email,
-      });
-
+      posthog.identify(email, { email });
       posthog.capture("waitlist_joined");
     } catch (err) {
-      setError(
-        err instanceof Error
-          ? err.message
-          : "Something went wrong"
-      );
+      setError(err instanceof Error ? err.message : "Something went wrong");
     } finally {
       setLoading(false);
     }
@@ -59,12 +50,9 @@ export function WaitlistForm() {
 
   if (success) {
     return (
-      <div className="glass mx-auto max-w-xl rounded-3xl p-6 text-center">
-        <p className="font-display text-xl font-semibold">
-          You're on the list.
-        </p>
-
-        <p className="mt-2 text-sm text-muted-foreground">
+      <div className="glass mx-auto max-w-md rounded-2xl p-6 text-center">
+        <p className="font-display text-xl font-semibold">You're on the list.</p>
+        <p className="mt-2 font-body text-sm text-muted-foreground">
           We'll let you know when early access opens.
         </p>
       </div>
@@ -72,38 +60,31 @@ export function WaitlistForm() {
   }
 
   return (
-    <div className="mx-auto max-w-xl">
+    <div className="mx-auto max-w-md">
       <form
         onSubmit={handleSubmit}
-        className="flex flex-col gap-3 sm:flex-row"
+        className="glass flex max-w-md flex-col gap-3 rounded-2xl p-3 sm:flex-row"
       >
         <input
           type="email"
           required
-          placeholder="Enter your email"
+          placeholder="founder@company.com"
           value={email}
-          onChange={(e) =>
-            setEmail(e.target.value)
-          }
+          onChange={(e) => setEmail(e.target.value)}
           disabled={loading}
-          className="glass h-14 flex-1 rounded-full px-6 outline-none"
+          className="flex-1 bg-transparent px-4 py-3 font-body text-base text-foreground outline-none placeholder:text-muted-foreground disabled:opacity-50"
         />
-
         <button
           type="submit"
           disabled={loading}
-          className="h-14 rounded-full bg-foreground px-8 font-ui text-primary-foreground transition-transform duration-300 hover:scale-[1.02] disabled:cursor-not-allowed disabled:opacity-50"
+          className="rounded-xl bg-foreground px-6 py-3 font-ui text-base font-medium text-primary-foreground transition-transform duration-500 hover:scale-[1.03] disabled:cursor-not-allowed disabled:opacity-50"
         >
-          {loading
-            ? "Joining..."
-            : "Get Early Access"}
+          {loading ? "Joining..." : "Get Early Access"}
         </button>
       </form>
 
       {error && (
-        <p className="mt-4 text-center text-sm text-red-500">
-          {error}
-        </p>
+        <p className="mt-4 text-center text-sm text-red-500">{error}</p>
       )}
     </div>
   );

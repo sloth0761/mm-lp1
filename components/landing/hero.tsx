@@ -1,9 +1,10 @@
 "use client";
 
 import { motion } from "motion/react";
-import { WaitlistForm } from "./waitlist-form";
+import { SilverSphere } from "./silver-sphere";
 import posthog from "posthog-js";
 import { useEffect } from "react";
+import { section } from "motion/react-client";
 
 export function AnalyticsEvents() {
   useEffect(() => {
@@ -15,22 +16,25 @@ export function AnalyticsEvents() {
 
 export function Hero() {
   return (
-    <section className="relative flex min-h-screen items-center overflow-hidden px-6 py-24">
-      <div className="mx-auto w-full max-w-5xl text-center">
+    <section className="relative flex min-h-screen items-center overflow-hidden px-6 pt-32 pb-20 lg:px-10">
+      <SilverSphere className="-left-40 top-10" size={560} />
+      <SilverSphere className="right-[-10rem] bottom-0" size={420} delay={1.2} />
+
+      <div className="relative mx-auto w-full max-w-5xl text-center">
         <motion.p
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="text-sm uppercase tracking-[0.3em] text-muted-foreground"
+          transition={{ duration: 1, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+          className="font-ui text-sm uppercase tracking-[0.3em] text-muted-foreground"
         >
           Founder Positioning Intelligence
         </motion.p>
 
         <motion.h1
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1 }}
-          className="mt-8 text-5xl font-bold leading-[0.95] tracking-tight sm:text-6xl lg:text-8xl"
+          initial={{ opacity: 0, y: 30, filter: "blur(10px)" }}
+          animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+          transition={{ duration: 1.3, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
+          className="text-gradient mt-8 font-display text-5xl font-bold leading-[0.95] tracking-tightest sm:text-6xl lg:text-8xl"
         >
           Become The Obvious
           <br />
@@ -40,25 +44,32 @@ export function Hero() {
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.2 }}
-          className="mx-auto mt-8 max-w-2xl text-lg text-muted-foreground lg:text-xl"
+          transition={{ duration: 1.1, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
+          className="mx-auto mt-8 max-w-2xl font-body text-lg leading-relaxed text-muted-foreground lg:text-xl"
         >
           Stop posting random content. Build authority, trust, and demand with
           the people who actually buy.
         </motion.p>
 
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.4 }}
-          className="mt-12"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1.1, delay: 0.7, ease: [0.16, 1, 0.3, 1] }}
+          className="mt-12 flex flex-col items-center justify-center gap-4 sm:flex-row"
         >
-          <WaitlistForm />
+          <a
+            href="#access"
+            className="rounded-full bg-foreground px-8 py-4 font-ui text-base font-medium text-primary-foreground transition-transform duration-500 hover:scale-[1.03]"
+          >
+            Get Early Access
+          </a>
+          <a
+            href="#thesis"
+            className="font-ui text-base text-muted-foreground transition-colors hover:text-foreground"
+          >
+            Read the thesis →
+          </a>
         </motion.div>
-
-        <p className="mt-4 text-sm text-muted-foreground">
-          Join founders getting early access.
-        </p>
       </div>
     </section>
   );

@@ -1,16 +1,18 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import localFont from "next/font/local";
 import { PHProvider } from "@/components/providers/posthog-provider";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+const satoshi = localFont({
+  src: "fonts/Satoshi-Variable.woff2",
+  variable: "--font-display",
+  display: "swap",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+const generalSans = localFont({
+  src: "fonts/GeneralSans-Variable.woff2",
+  variable: "--font-sans",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -27,7 +29,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${satoshi.variable} ${generalSans.variable} bg-white text-black dark:bg-black dark:text-white`}
     >
       <body className="min-h-full flex flex-col">
         <PHProvider>
